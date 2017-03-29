@@ -10,8 +10,6 @@ import ${package}.dao.${className}Dao;
 import ${package}.entity.${className}Entity;
 import ${package}.service.${className}Service;
 
-
-
 @Service("${classname}Service")
 public class ${className}ServiceImpl implements ${className}Service {
 	@Autowired
@@ -51,5 +49,4 @@ public class ${className}ServiceImpl implements ${className}Service {
 	public void deleteBatch(${pk.attrType}[] ${pk.attrname}s){
 		${classname}Dao.deleteBatch(${pk.attrname}s);
 	}
-	
 }

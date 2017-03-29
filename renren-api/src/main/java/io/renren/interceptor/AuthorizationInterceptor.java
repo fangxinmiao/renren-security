@@ -15,46 +15,51 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 权限(Token)验证
+ *
  * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2017-03-23 15:38
  */
 @Component
 public class AuthorizationInterceptor extends HandlerInterceptorAdapter {
-    @Autowired
-    private TokenService tokenService;
+    private final TokenService tokenService;
 
     public static final String LOGIN_USER_KEY = "LOGIN_USER_KEY";
 
+    @Autowired
+    public AuthorizationInterceptor(TokenService tokenService) {
+        this.tokenService = tokenService;
+    }
+
     @Override
-    public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+    public boolean preHandle(HttpServletRequest request,
+                             HttpServletResponse response,
+                             Object handler) throws Exception {
         IgnoreAuth annotation;
-        if(handler instanceof HandlerMethod) {
+        if (handler instanceof HandlerMethod) {
             annotation = ((HandlerMethod) handler).getMethodAnnotation(IgnoreAuth.class);
-        }else{
+        } else {
             return true;
         }
 
-        //如果有@IgnoreAuth注解，则不验证token
-        if(annotation != null){
+        // 如果有@IgnoreAuth注解，则不验证token
+        if (annotation != null) {
             return true;
         }
 
-        //获取token
+        // 获取token
         String token = request.getParameter("token");
 
-        //token为空
-        if(StringUtils.isBlank(token)){
+        // token为空
+        if (StringUtils.isBlank(token)) {
             throw new RRException("token不能为空");
         }
 
-        //查询token信息
+        // 查询token信息
         TokenEntity tokenEntity = tokenService.queryByToken(token);
-        if(tokenEntity == null || tokenEntity.getExpireTime().getTime() < System.currentTimeMillis()){
+        if (tokenEntity == null || tokenEntity.getExpireTime().getTime() < System.currentTimeMillis()) {
             throw new RRException("token失效，请重新登录");
         }
 
-        //设置userId到request里，后续根据userId，获取用户信息
+        // 设置userId到request里，后续根据userId，获取用户信息
         request.setAttribute(LOGIN_USER_KEY, tokenEntity.getUserId());
 
         return true;

@@ -14,44 +14,47 @@ import java.util.zip.ZipOutputStream;
 
 @Service("sysGeneratorService")
 public class SysGeneratorServiceImpl implements SysGeneratorService {
-	@Autowired
-	private SysGeneratorDao sysGeneratorDao;
+    private final SysGeneratorDao sysGeneratorDao;
 
-	@Override
-	public List<Map<String, Object>> queryList(Map<String, Object> map) {
-		return sysGeneratorDao.queryList(map);
-	}
+    @Autowired
+    public SysGeneratorServiceImpl(SysGeneratorDao sysGeneratorDao) {
+        this.sysGeneratorDao = sysGeneratorDao;
+    }
 
-	@Override
-	public int queryTotal(Map<String, Object> map) {
-		return sysGeneratorDao.queryTotal(map);
-	}
+    @Override
+    public List<Map<String, Object>> queryList(Map<String, Object> map) {
+        return sysGeneratorDao.queryList(map);
+    }
 
-	@Override
-	public Map<String, String> queryTable(String tableName) {
-		return sysGeneratorDao.queryTable(tableName);
-	}
+    @Override
+    public int queryTotal(Map<String, Object> map) {
+        return sysGeneratorDao.queryTotal(map);
+    }
 
-	@Override
-	public List<Map<String, String>> queryColumns(String tableName) {
-		return sysGeneratorDao.queryColumns(tableName);
-	}
+    @Override
+    public Map<String, String> queryTable(String tableName) {
+        return sysGeneratorDao.queryTable(tableName);
+    }
 
-	@Override
-	public byte[] generatorCode(String[] tableNames) {
-		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		ZipOutputStream zip = new ZipOutputStream(outputStream);
-		
-		for(String tableName : tableNames){
-			//查询表信息
-			Map<String, String> table = queryTable(tableName);
-			//查询列信息
-			List<Map<String, String>> columns = queryColumns(tableName);
-			//生成代码
-			GenUtils.generatorCode(table, columns, zip);
-		}
-		IOUtils.closeQuietly(zip);
-		return outputStream.toByteArray();
-	}
+    @Override
+    public List<Map<String, String>> queryColumns(String tableName) {
+        return sysGeneratorDao.queryColumns(tableName);
+    }
 
+    @Override
+    public byte[] generatorCode(String[] tableNames) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        ZipOutputStream zip = new ZipOutputStream(outputStream);
+
+        for (String tableName : tableNames) {
+            // 查询表信息
+            Map<String, String> table = queryTable(tableName);
+            // 查询列信息
+            List<Map<String, String>> columns = queryColumns(tableName);
+            // 生成代码
+            GenUtils.generatorCode(table, columns, zip);
+        }
+        IOUtils.closeQuietly(zip);
+        return outputStream.toByteArray();
+    }
 }

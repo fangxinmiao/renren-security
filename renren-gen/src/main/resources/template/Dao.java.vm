@@ -10,5 +10,4 @@ import ${package}.entity.${className}Entity;
  * @date ${datetime}
  */
 public interface ${className}Dao extends BaseDao<${className}Entity> {
-	
 }

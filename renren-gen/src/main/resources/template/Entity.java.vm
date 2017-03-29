@@ -7,13 +7,10 @@ import java.util.Date;
 import java.math.BigDecimal;
 #end
 
-
 /**
  * ${comments}
  * 
  * @author ${author}
- * @email ${email}
- * @date ${datetime}
  */
 public class ${className}Entity implements Serializable {
 	private static final long serialVersionUID = 1L;

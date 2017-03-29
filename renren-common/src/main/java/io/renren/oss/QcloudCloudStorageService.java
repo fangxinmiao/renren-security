@@ -14,22 +14,20 @@ import java.io.InputStream;
 
 /**
  * 腾讯云存储
+ *
  * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2017-03-26 20:51
  */
-public class QcloudCloudStorageService extends CloudStorageService{
+public class QcloudCloudStorageService extends CloudStorageService {
     private COSClient client;
 
-    public QcloudCloudStorageService(CloudStorageConfig config){
+    QcloudCloudStorageService(CloudStorageConfig config) {
         this.config = config;
-
-        //初始化
         init();
     }
 
-    private void init(){
-        client = new COSClient(config.getQcloudAppId(), config.getQcloudSecretId(),
+    private void init() {
+        client = new COSClient(config.getQcloudAppId(),
+                config.getQcloudSecretId(),
                 config.getQcloudSecretKey());
     }
 
@@ -48,20 +46,21 @@ public class QcloudCloudStorageService extends CloudStorageService{
             throw new RRException("上传文件失败", e);
         }
 
-        //腾讯云必需要以"/"开头
-        if(!path.startsWith("/")) {
+        // 腾讯云必需以"/"开头
+        if (!path.startsWith("/")) {
             path = "/" + path;
         }
 
-        //上传到腾讯云
-        UploadFileRequest request = new UploadFileRequest(config.getQcloudBucketName(), path, file.getPath());
+        // 上传到腾讯云
+        UploadFileRequest request = new UploadFileRequest(config.getQcloudBucketName(),
+                path, file.getPath());
         String response = client.uploadFile(request);
 
-        //删除临时文件
+        // 删除临时文件
         file.delete();
 
         JSONObject jsonObject = JSON.parseObject(response);
-        if(jsonObject.getIntValue("code") != 0) {
+        if (jsonObject.getIntValue("code") != 0) {
             throw new RRException("文件上传失败，" + jsonObject.getString("message"));
         }
 

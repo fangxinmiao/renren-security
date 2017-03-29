@@ -13,24 +13,22 @@ import java.io.InputStream;
 
 /**
  * 七牛云存储
+ *
  * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2017-03-25 15:41
  */
-public class QiniuCloudStorageService extends CloudStorageService{
+public class QiniuCloudStorageService extends CloudStorageService {
     private UploadManager uploadManager;
     private String token;
 
-    public QiniuCloudStorageService(CloudStorageConfig config){
+    QiniuCloudStorageService(CloudStorageConfig config) {
         this.config = config;
-
-        //初始化
         init();
     }
 
-    private void init(){
+    private void init() {
         uploadManager = new UploadManager(new Configuration(Zone.zone0()));
-        token = Auth.create(config.getQiniuAccessKey(), config.getQiniuSecretKey()).
+        token = Auth.create(config.getQiniuAccessKey(),
+                config.getQiniuSecretKey()).
                 uploadToken(config.getQiniuBucketName());
     }
 

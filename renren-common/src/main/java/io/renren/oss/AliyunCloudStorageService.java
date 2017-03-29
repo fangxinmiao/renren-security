@@ -8,22 +8,20 @@ import java.io.InputStream;
 
 /**
  * 阿里云存储
+ *
  * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2017-03-26 16:22
  */
-public class AliyunCloudStorageService extends CloudStorageService{
+public class AliyunCloudStorageService extends CloudStorageService {
     private OSSClient client;
 
-    public AliyunCloudStorageService(CloudStorageConfig config){
+    AliyunCloudStorageService(CloudStorageConfig config) {
         this.config = config;
-
-        //初始化
         init();
     }
 
-    private void init(){
-        client = new OSSClient(config.getAliyunEndPoint(), config.getAliyunAccessKeyId(),
+    private void init() {
+        client = new OSSClient(config.getAliyunEndPoint(),
+                config.getAliyunAccessKeyId(),
                 config.getAliyunAccessKeySecret());
     }
 
@@ -36,7 +34,7 @@ public class AliyunCloudStorageService extends CloudStorageService{
     public String upload(InputStream inputStream, String path) {
         try {
             client.putObject(config.getAliyunBucketName(), path, inputStream);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new RRException("上传文件失败，请检查配置信息", e);
         }
 

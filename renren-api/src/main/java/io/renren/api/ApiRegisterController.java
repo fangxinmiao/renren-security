@@ -13,9 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 注册
+ *
  * @author chenshun
- * @email sunlightcs@gmail.com
- * @date 2017-03-26 17:27
  */
 @RestController
 @RequestMapping("/api")
@@ -28,12 +27,10 @@ public class ApiRegisterController {
      */
     @IgnoreAuth
     @PostMapping("register")
-    public R register(@RequestBody UserEntity user){
+    public R register(@RequestBody UserEntity user) {
         Assert.isBlank(user.getMobile(), "手机号不能为空");
         Assert.isBlank(user.getPassword(), "密码不能为空");
-
         userService.save(user);
-
         return R.ok();
     }
 }
